@@ -28,5 +28,6 @@ class Settings(BaseSettings):
     # App
     app_name: str = Field(default="User Service")
     debug: bool = Field(default=True)
+    max_user_sessions: int = Field(default=10)
 
 settings = Settings()
