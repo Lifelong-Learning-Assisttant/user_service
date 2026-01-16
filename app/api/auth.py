@@ -13,7 +13,11 @@ from app.schemas.token import Token
 
 router = APIRouter()
 
-@router.post("/login", response_model=Token)
+class LoginResponse(Token):
+    user_id: str
+    username: str
+
+@router.post("/login", response_model=LoginResponse)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: AsyncSession = Depends(get_db)
@@ -35,4 +39,9 @@ async def login_for_access_token(
         expires_delta=access_token_expires
     )
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_id": str(user.id),
+        "username": user.username
+    }
