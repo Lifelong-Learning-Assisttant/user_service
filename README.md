@@ -20,27 +20,32 @@
 
 ## Быстрый запуск (Разработка)
 
+Сервис запускается в составе общей системы через корневой скрипт `start-dev.sh`.
+Для изолированного запуска используйте:
+
 ```bash
 # Запуск сервиса и БД
-docker compose -f docker-compose-dev.yml up -d
+docker compose -f docker-compose-dev.yml up -d --build
 
 # Применение миграций (внутри контейнера)
-docker exec user_service alembic upgrade head
+docker exec user-service-local uv run alembic upgrade head
 ```
+
+> **Примечание**: В режиме разработки используется порт `8010`, чтобы избежать конфликта с RAG-сервисом.
 
 ## Управление пользователями (CLI)
 
-Регистрация пользователей в прототипе осуществляется через скрипты:
+Регистрация пользователей осуществляется через скрипты внутри контейнера:
 
 ```bash
 # Регистрация нового пользователя
-docker exec -it user_service python scripts/register_user.py <username> <password>
+docker exec user-service-local uv run python scripts/register_user.py <username> <password>
 
 # Список пользователей
-docker exec -it user_service python scripts/list_users.py
+docker exec user-service-local uv run python scripts/list_users.py
 
 # Удаление пользователя
-docker exec -it user_service python scripts/delete_user.py <username>
+docker exec user-service-local uv run python scripts/delete_user.py <username>
 ```
 
 ## Документация
