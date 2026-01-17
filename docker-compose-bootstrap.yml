@@ -1,0 +1,49 @@
+name: user-bootstrap
+
+services:
+  db:
+    image: postgres:15.15-alpine
+    container_name: user-db-bootstrap
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - user_service_network
+
+  db-init:
+    image: ghcr.io/lifelong-learning-assisttant/user_service:v001
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=user_db
+    networks:
+      - user_service_network
+    entrypoint: >
+      sh -c "
+      echo '🏗️ Running database migrations...';
+      uv run alembic upgrade head;
+      
+      echo '👤 Registering default test user...';
+      uv run python scripts/register_user.py test_user test_password;
+      
+      echo '✅ User database initialized!';"
+
+networks:
+  user_service_network:
+    name: user_service_network
+    external: true
+
+volumes:
+  user_postgres_data:
+    external: true
