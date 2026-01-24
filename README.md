@@ -28,28 +28,36 @@
 docker compose -f docker-compose-dev.yml up -d --build
 
 # Применение миграций (внутри контейнера)
-docker exec user-service-local uv run alembic upgrade head
+docker exec user-service-dev uv run alembic upgrade head
 ```
 
 > **Примечание**: В режиме разработки используется порт `8010`, чтобы избежать конфликта с RAG-сервисом.
 
 ## Управление пользователями (CLI)
 
-Регистрация пользователей осуществляется через скрипты внутри контейнера:
+Подробная информация об управлении пользователями, ролях и массовом создании доступна в [документации](docs/user_management.md).
 
 ```bash
-# Регистрация нового пользователя
-docker exec user-service-local uv run python scripts/register_user.py <username> <password>
+# Регистрация нового пользователя (с ролью)
+docker exec user-service-dev uv run python scripts/register_user.py <username> <password> [role]
+
+# Массовое создание пользователей из JSON
+docker cp users.json user-service-dev:/app/users.json
+docker exec user-service-dev uv run python scripts/bulk_create_users.py users.json
 
 # Список пользователей
-docker exec user-service-local uv run python scripts/list_users.py
+docker exec user-service-dev uv run python scripts/list_users.py
 
-# Удаление пользователя
-docker exec user-service-local uv run python scripts/delete_user.py <username>
+# Удаление пользователя и всех его данных
+docker exec user-service-dev uv run python scripts/delete_user.py <username>
+
+# Массовое удаление пользователей
+docker exec user-service-dev uv run python scripts/bulk_delete_users.py users.json
 ```
 
 ## Документация
 
 Подробная информация доступна в папке `docs/`:
+- [Управление пользователями](docs/user_management.md)
 - [Архитектура и БД](docs/architecture.md)
 - [Взаимодействие компонентов](docs/interaction.md)

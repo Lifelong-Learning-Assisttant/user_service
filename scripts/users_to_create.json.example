@@ -1,0 +1,12 @@
+[
+  {
+    "username": "lead_developer",
+    "password": "change_me_immediately_123",
+    "role": "developer"
+  },
+  {
+    "username": "student_user",
+    "password": "simple_password_456",
+    "role": "user"
+  }
+]

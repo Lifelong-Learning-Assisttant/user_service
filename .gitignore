@@ -1,3 +1,6 @@
+# Игнорируем файл с данными пользователей которых мы создаем
+user_service/scripts/users_to_create.json
+
 # Python
 __pycache__/
 *.py[cod]

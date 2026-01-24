@@ -20,7 +20,7 @@ async def list_users():
         else:
             for user in users:
                 status = "Active" if user.is_active else "Inactive"
-                print(f"ID: {user.id} | Username: {user.username} | Status: {status} | Created: {user.created_at}")
+                print(f"ID: {user.id} | Username: {user.username} | Role: {user.role} | Status: {status} | Created: {user.created_at}")
         print("------------------------\n")
 
 if __name__ == "__main__":
