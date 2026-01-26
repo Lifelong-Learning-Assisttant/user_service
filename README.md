@@ -9,6 +9,7 @@
 - **Настройки LLM**: Персональный выбор моделей для Агента, RAG и Квизов.
 - **История**: Хранение ссылок на сессии чатов и результатов прохождения тестов.
 - **Изоляция**: Пользователи имеют доступ только к своим данным.
+- **Безопасность**: Защита от brute force атак (блокировка после 5 попыток на 5 часов). Подробнее в [документации](docs/brute_force_protection.md).
 
 ## Технологический стек
 
@@ -61,3 +62,4 @@ docker exec user-service-dev uv run python scripts/bulk_delete_users.py users.js
 - [Управление пользователями](docs/user_management.md)
 - [Архитектура и БД](docs/architecture.md)
 - [Взаимодействие компонентов](docs/interaction.md)
+- [Защита от Brute Force](docs/brute_force_protection.md)
